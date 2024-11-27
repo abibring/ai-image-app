@@ -10,12 +10,13 @@ interface Session {
 }
 
 const AlbumGallery = ({ session }: { session: Session }) => {
-  const { albums, setAlbums, newAlbumName, setNewAlbumName } = useAppStore();
+  const { albums, newAlbumName, setNewAlbumName } = useAppStore();
 
   const fetchAlbums = async () => {
     if (!session?.user?.id) return;
     const userAlbums = await getUserAlbums(session.user.id);
-    setAlbums(userAlbums as any);
+    console.log("userAlbums:", userAlbums);
+    // setAlbums(userAlbums as any);
   };
 
   const handleCreateAlbum = async () => {

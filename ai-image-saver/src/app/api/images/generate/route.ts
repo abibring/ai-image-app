@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       succeeded: true,
     });
   } catch (error) {
-    console.error(`Error in /api/generate-image:`, error);
+    console.error(`Error in /api/image/generate:`, error);
     return NextResponse.json({
       imageUrl: "",
       succeeded: false,

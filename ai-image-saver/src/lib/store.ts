@@ -1,36 +1,36 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
 interface Image {
-  id: string
-  url: string
-  prompt: string
-  createdAt: string
+  id: string;
+  url: string;
+  prompt: string;
+  createdAt: string;
 }
 
 interface Album {
-  id: string
-  name: string
-  coverImage?: string
-  imageCount: number
+  id: string;
+  name: string;
+  coverImage?: string;
+  imageCount: number;
 }
 
 interface AppState {
-  prompt: string
-  setPrompt: (prompt: string) => void
-  generatedImage: string | null
-  setGeneratedImage: (image: string | null) => void
-  isGenerating: boolean
-  setIsGenerating: (isGenerating: boolean) => void
-  images: Image[]
-  setImages: (images: Image[]) => void
-  albums: Album[]
-  setAlbums: (albums: Album[]) => void
-  newAlbumName: string
-  setNewAlbumName: (name: string) => void
+  prompt: string;
+  setPrompt: (prompt: string) => void;
+  generatedImage: string | null;
+  setGeneratedImage: (image: string | null) => void;
+  isGenerating: boolean;
+  setIsGenerating: (isGenerating: boolean) => void;
+  images: Image[];
+  setImages: (images: Image[]) => void;
+  albums: Album[];
+  setAlbums: (albums: Album[]) => void;
+  newAlbumName: string;
+  setNewAlbumName: (name: string) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  prompt: '',
+  prompt: "",
   setPrompt: (prompt) => set({ prompt }),
   generatedImage: null,
   setGeneratedImage: (image) => set({ generatedImage: image }),
@@ -40,7 +40,6 @@ export const useAppStore = create<AppState>((set) => ({
   setImages: (images) => set({ images }),
   albums: [],
   setAlbums: (albums) => set({ albums }),
-  newAlbumName: '',
+  newAlbumName: "",
   setNewAlbumName: (name) => set({ newAlbumName: name }),
-}))
-
+}));

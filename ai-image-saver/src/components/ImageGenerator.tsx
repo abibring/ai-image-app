@@ -27,7 +27,7 @@ export function ImageGenerator() {
 
     setIsGenerating(true);
     try {
-      const res = await fetch(`/api/generate-image`, {
+      const res = await fetch(`/api/image/generate`, {
         method: "POST",
         body: JSON.stringify({
           prompt,
@@ -52,10 +52,23 @@ export function ImageGenerator() {
   };
 
   const handleSave = async () => {
-    if (!generatedImage || !session?.user?.id) return;
+    const userId = "1" || session?.user?.id;
+
+    if (!generatedImage || !userId) return;
 
     try {
-      await saveImage(session.user.id, prompt, generatedImage);
+      const res = await fetch(`/api/image/save`, {
+        method: "POST",
+        body: JSON.stringify({
+          imageUrl: generatedImage,
+          imageName: `${new Date().toISOString()}-ai-generated-image.pdf`,
+          prompt,
+        }),
+      });
+      if (!res.ok) throw new Error("Error");
+
+      const results = await res.json();
+      console.log("savedImage:", results);
       toast({
         title: "Success",
         description: "Image saved successfully!",
