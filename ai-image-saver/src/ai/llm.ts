@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { AIMessage } from "./types";
 import { openai } from "./ai";
 import { zodFunction } from "openai/helpers/zod";

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { runLLM } from "./llm";
 import { addMessages, getMessages, saveToolResponse } from "./memory";
 // import { showLoader, logMessage } from './ui'

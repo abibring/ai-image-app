@@ -1,4 +1,5 @@
-// import { JSONFilePreset } from 'lowdb/node'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import type { AIMessage } from "./types";
 import { v4 as uuidv4 } from "uuid";
 
