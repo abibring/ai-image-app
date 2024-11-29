@@ -1,15 +1,15 @@
-import Image from 'next/image'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 interface AlbumCardProps {
   album: {
-    id: string
-    name: string
-    coverImage?: string
-    imageCount: number
-  }
-  onDelete: () => void
+    id: string;
+    name: string;
+    coverImage?: string;
+    imageCount: number;
+  };
+  onDelete: () => void;
 }
 
 export function AlbumCard({ album, onDelete }: AlbumCardProps) {
@@ -40,6 +40,5 @@ export function AlbumCard({ album, onDelete }: AlbumCardProps) {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
-

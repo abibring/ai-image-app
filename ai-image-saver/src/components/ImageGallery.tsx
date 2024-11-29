@@ -18,10 +18,10 @@ const ImageGallery = () => {
       const userId = (session?.user as any)?.databaseInfo?.id;
       if (!userId) return [];
 
-      const results = await fetch(`/api/image/getAll/${userId}`).then((r) =>
+      const { data } = await fetch(`/api/image/get/${userId}`).then((r) =>
         r.json()
       );
-      return results;
+      return data;
     } catch (error) {
       return [];
     }
@@ -33,7 +33,7 @@ const ImageGallery = () => {
 
       (async () => {
         const userImages = await fetchUserImages();
-        setImages(userImages?.data);
+        setImages(userImages);
       })();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

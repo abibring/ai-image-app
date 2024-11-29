@@ -28,12 +28,16 @@ interface AppState {
   setAlbums: (albums: Album[]) => void;
   newAlbumName: string;
   setNewAlbumName: (name: string) => void;
+  imageName: string;
+  setImageName: (imageName: string) => void;
   deleteImage: (id: string, imageUrl: string) => Promise<void>;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
   prompt: "",
   setPrompt: (prompt) => set({ prompt }),
+  imageName: "",
+  setImageName: (imageName) => set({ imageName }),
   generatedImage: null,
   setGeneratedImage: (image) => set({ generatedImage: image }),
   isGenerating: false,

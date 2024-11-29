@@ -1,13 +1,17 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { useSession, signIn, signOut } from "next-auth/react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export function Header() {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
 
   return (
     <header className="bg-white shadow">
@@ -19,15 +23,19 @@ export function Header() {
           <Popover>
             <PopoverTrigger asChild>
               <Avatar className="cursor-pointer">
-                <AvatarImage src={session.user?.image || ''} />
-                <AvatarFallback>{session.user?.name?.[0] || 'U'}</AvatarFallback>
+                <AvatarImage src={session.user?.image || ""} />
+                <AvatarFallback>
+                  {session.user?.name?.[0] || "U"}
+                </AvatarFallback>
               </Avatar>
             </PopoverTrigger>
             <PopoverContent className="w-48">
               <div className="space-y-2">
                 <p className="text-sm font-medium">{session.user?.name}</p>
                 <p className="text-xs text-gray-500">{session.user?.email}</p>
-                <Button onClick={() => signOut()} className="w-full">Sign Out</Button>
+                <Button onClick={() => signOut()} className="w-full">
+                  Sign Out
+                </Button>
               </div>
             </PopoverContent>
           </Popover>
@@ -36,6 +44,5 @@ export function Header() {
         )}
       </div>
     </header>
-  )
+  );
 }
-

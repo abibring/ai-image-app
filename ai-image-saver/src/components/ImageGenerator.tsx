@@ -1,14 +1,17 @@
 "use client";
 
-import { useAppStore } from "@/lib/store";
+import { useSession } from "next-auth/react";
+
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import Image from "next/image";
+import { useAppStore } from "@/lib/store";
 
-import { saveImage } from "@/lib/db";
-import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Label } from "./ui/label";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
 export function ImageGenerator() {
   const {
@@ -18,6 +21,8 @@ export function ImageGenerator() {
     setGeneratedImage,
     isGenerating,
     setIsGenerating,
+    setImageName,
+    imageName,
   } = useAppStore();
   const { toast } = useToast();
   const { data: session } = useSession();
@@ -50,25 +55,25 @@ export function ImageGenerator() {
       setIsGenerating(false);
     }
   };
-  console.log("generatedImage:", generatedImage);
-  const handleSave = async () => {
-    const userId = session?.user?.id;
 
-    if (!generatedImage || !userId) return;
+  const handleSave = async () => {
+    const user = session?.user;
+
+    if (!generatedImage || !user) return;
 
     try {
-      const res = await fetch(`/api/image/save`, {
+      const results = await fetch(`/api/image/save`, {
         method: "POST",
         body: JSON.stringify({
           imageUrl: generatedImage,
-          imageName: `${new Date().toISOString()}-ai-generated-image`,
+          imageName: (imageName || "")
+            .trim()
+            .toLowerCase()
+            .replaceAll(" ", "_"),
           prompt,
         }),
-      });
-      if (!res.ok) throw new Error("Error");
+      }).then((r) => r.json());
 
-      const results = await res.json();
-      console.log("savedImage:", results);
       toast({
         title: results.status ? "Success" : "Failure",
         description: results.status
@@ -86,30 +91,52 @@ export function ImageGenerator() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex space-x-2">
-        <Input
-          type="text"
-          placeholder="Enter your prompt"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        />
-        <Button onClick={handleGenerate} disabled={isGenerating}>
-          {isGenerating ? "Generating..." : "Generate"}
-        </Button>
-      </div>
-      {generatedImage && (
-        <div className="space-y-4">
-          <Image
-            src={generatedImage}
-            alt="Generated image"
-            width={512}
-            height={512}
-            className="rounded-lg"
+    <Dialog>
+      <div className="space-y-4">
+        <div className="flex space-x-2">
+          <Input
+            type="text"
+            placeholder="Enter your prompt"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
           />
-          <Button onClick={handleSave}>Save Image</Button>
+          <Button onClick={handleGenerate} disabled={isGenerating}>
+            {isGenerating ? "Generating..." : "Generate"}
+          </Button>
         </div>
-      )}
-    </div>
+
+        {generatedImage && (
+          <div className="space-y-4">
+            <Image
+              src={generatedImage}
+              alt="Generated image"
+              width={512}
+              height={512}
+              className="rounded-lg"
+            />
+            <DialogTrigger asChild>
+              <Button variant="outline">Save Image</Button>
+            </DialogTrigger>
+          </div>
+        )}
+      </div>
+      <DialogContent className="w-80">
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <h4 className="font-medium leading-none">Give this image a name</h4>
+
+            <Label htmlFor="width">Name</Label>
+            <Input
+              value={imageName}
+              onChange={(e) => setImageName(e.target.value)}
+              id="width"
+              // defaultValue="100%"
+              className="col-span-2 h-8"
+            />
+            <Button onClick={handleSave}>Save</Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

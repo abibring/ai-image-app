@@ -24,6 +24,9 @@ export function ImageCard({ image, onDelete }: ImageCardProps) {
       document.exitFullscreen();
     }
   };
+
+  const handleAddImageToAlbum = () => {};
+
   return (
     <Card className="flex flex-row">
       <CardContent className="p-2">
@@ -38,9 +41,14 @@ export function ImageCard({ image, onDelete }: ImageCardProps) {
       </CardContent>
       <CardFooter className="flex justify-between w-full">
         <p className="text-sm max-w-[40vw]">{image.prompt}</p>
-        <Button variant="destructive" size="sm" onClick={onDelete}>
-          Delete
-        </Button>
+        <div className="flex flex-col gap-2 ">
+          <Button variant="default" size="sm" onClick={handleAddImageToAlbum}>
+            Add Image To Album
+          </Button>
+          <Button variant="destructive" size="sm" onClick={onDelete}>
+            Delete
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );
