@@ -50,7 +50,7 @@ export function ImageGenerator() {
       setIsGenerating(false);
     }
   };
-
+  console.log("generatedImage:", generatedImage);
   const handleSave = async () => {
     const userId = "1" || session?.user?.id;
 
@@ -61,7 +61,7 @@ export function ImageGenerator() {
         method: "POST",
         body: JSON.stringify({
           imageUrl: generatedImage,
-          imageName: `${new Date().toISOString()}-ai-generated-image.pdf`,
+          imageName: `${new Date().toISOString()}-ai-generated-image`,
           prompt,
         }),
       });
@@ -70,8 +70,10 @@ export function ImageGenerator() {
       const results = await res.json();
       console.log("savedImage:", results);
       toast({
-        title: "Success",
-        description: "Image saved successfully!",
+        title: results.succeeded ? "Success" : "Failure",
+        description: results.succeeded
+          ? "Image saved successfully!"
+          : "Failed to save image. Please try again.",
       });
     } catch (error) {
       console.error("\n\nhandleSave => error:", error, "\n\n");

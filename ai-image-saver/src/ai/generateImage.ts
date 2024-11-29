@@ -18,7 +18,7 @@ export const generateImageToolDefinition = {
 
 type Args = z.infer<typeof generateImageToolDefinition.parameters>;
 
-export const generateImage: ToolFn<Args, string> = async ({
+export const generateImage: ToolFn<Args, Buffer> = async ({
   toolArgs: { prompt },
   userMessage,
 }) => {
@@ -27,8 +27,14 @@ export const generateImage: ToolFn<Args, string> = async ({
     prompt,
     n: 1,
     size: "1024x1024",
+    response_format: "b64_json",
   });
-
-  const imageUrl = response.data[0].url!;
-  return imageUrl;
+  console.log("\n\n DALE DATA:", response.data, "\n\n");
+  const imageData = response.data[0].b64_json;
+  if (imageData) {
+    const buffer = Buffer.from(imageData, "base64");
+    return buffer;
+    // return imageUrl;
+  }
+  return Buffer.from([]);
 };

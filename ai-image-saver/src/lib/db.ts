@@ -1,28 +1,55 @@
-import { PrismaClient } from '@prisma/client'
+import { prisma } from "../../prisma/prisma";
 
-const prisma = new PrismaClient()
+export async function saveImage(
+  userId: string,
+  prompt: string,
+  imageUrl: string,
+  cloudinaryId?: string // Optional, since it's nullable in your schema
+) {
+  // Validate required inputs
+  if (!userId || !prompt || !imageUrl) {
+    throw new Error(
+      "Invalid input: userId, prompt, and imageUrl are required."
+    );
+  }
 
-export async function saveImage(userId: string, prompt: string, imageUrl: string) {
-  return prisma.image.create({
-    data: {
-      userId,
-      prompt,
-      url: imageUrl,
-    },
-  })
+  console.log(
+    "userId:",
+    userId,
+    "\nprompt:",
+    prompt,
+    "\nimageUrl:",
+    imageUrl,
+    "\ncloudinaryId:",
+    cloudinaryId
+  );
+  try {
+    return prisma.image.create({
+      data: {
+        cloudinaryId: cloudinaryId || null, // Explicitly set null if not provided
+        prompt,
+        userId,
+        url: imageUrl,
+      },
+    });
+  } catch (error) {
+    console.error("error in saving image to prisma:", error);
+    return null;
+  }
+  // Create the image record in the database
 }
 
 export async function getUserImages(userId: string) {
   return prisma.image.findMany({
     where: { userId },
-    orderBy: { createdAt: 'desc' },
-  })
+    orderBy: { createdAt: "desc" },
+  });
 }
 
 export async function deleteImage(imageId: string) {
   return prisma.image.delete({
     where: { id: imageId },
-  })
+  });
 }
 
 export async function createAlbum(userId: string, name: string) {
@@ -31,7 +58,7 @@ export async function createAlbum(userId: string, name: string) {
       userId,
       name,
     },
-  })
+  });
 }
 
 export async function getUserAlbums(userId: string) {
@@ -42,13 +69,12 @@ export async function getUserAlbums(userId: string) {
         select: { images: true },
       },
     },
-    orderBy: { createdAt: 'desc' },
-  })
+    orderBy: { createdAt: "desc" },
+  });
 }
 
 export async function deleteAlbum(albumId: string) {
   return prisma.album.delete({
     where: { id: albumId },
-  })
+  });
 }
-
