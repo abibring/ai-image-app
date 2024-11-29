@@ -1,7 +1,9 @@
+"use client";
 import Image from "next/image";
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "./ui/button";
+import { BaseSyntheticEvent } from "react";
 
 interface ImageCardProps {
   image: {
@@ -14,15 +16,24 @@ interface ImageCardProps {
 }
 
 export function ImageCard({ image, onDelete }: ImageCardProps) {
+  const handleImageFullScreen = (e: BaseSyntheticEvent) => {
+    const image = e.target as HTMLImageElement;
+    if (!document.fullscreenElement) {
+      image.requestFullscreen();
+    } else if (!!document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  };
   return (
     <Card className="flex flex-row">
       <CardContent className="p-2">
         <Image
           src={image.url}
-          alt={image.prompt}
+          alt={image.prompt || "ai generated image"}
           width={300}
           height={300}
           className="rounded-lg min-w-[300px] min-h-[300px]"
+          onClick={handleImageFullScreen}
         />
       </CardContent>
       <CardFooter className="flex justify-between w-full">
