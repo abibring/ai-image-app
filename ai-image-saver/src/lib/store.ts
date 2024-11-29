@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { deleteImage } from "./db";
 
 interface Image {
   id: string;
@@ -27,9 +28,10 @@ interface AppState {
   setAlbums: (albums: Album[]) => void;
   newAlbumName: string;
   setNewAlbumName: (name: string) => void;
+  deleteImage: (id: string, imageUrl: string) => Promise<void>;
 }
 
-export const useAppStore = create<AppState>((set) => ({
+export const useAppStore = create<AppState>((set, get) => ({
   prompt: "",
   setPrompt: (prompt) => set({ prompt }),
   generatedImage: null,
@@ -42,4 +44,10 @@ export const useAppStore = create<AppState>((set) => ({
   setAlbums: (albums) => set({ albums }),
   newAlbumName: "",
   setNewAlbumName: (name) => set({ newAlbumName: name }),
+  deleteImage: async (id, imageUrl) => {
+    const images = get().images;
+    const newImages = images.filter((image) => image.url !== imageUrl);
+    await deleteImage(id, imageUrl);
+    set({ images: newImages });
+  },
 }));

@@ -1,15 +1,13 @@
+"use client";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from "@/hooks/use-toast";
 import { createAlbum, getUserAlbums } from "@/lib/db";
 import { useAppStore } from "@/lib/store";
+import { useSession } from "next-auth/react";
 
-interface Session {
-  user?: {
-    id: string;
-  };
-}
-
-const AlbumGallery = ({ session }: { session: Session }) => {
+const AlbumGallery = () => {
+  const { data: session } = useSession();
   const { albums, newAlbumName, setNewAlbumName } = useAppStore();
 
   const fetchAlbums = async () => {

@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     const imageUrl = req?.imageUrl;
     const imageName = req?.imageName;
     const prompt = req?.prompt;
-    const userId = req?.userId || "1";
+    const userId = req?.userId || "cm432awrc0000gjrbs9h18e8q";
     const imageKey = `${userId}_${imageName}_${Date.now()}`;
 
     console.log(
@@ -32,11 +32,12 @@ export async function POST(request: NextRequest) {
         imageUrl,
         imageName,
         prompt,
-        "1",
+        "cm432awrc0000gjrbs9h18e8q",
         imageKey
       );
       const tmpDir = path.resolve("./tmp");
       const pathname = `${userId}_${imageName}_${Date.now()}.jpg`;
+
       // Generate a unique temporary file path
       const tempPath = path.join(tmpDir, pathname);
       // Delete the temporary file
@@ -49,10 +50,10 @@ export async function POST(request: NextRequest) {
     if (!cloudinaryResponse?.url) {
       throw new Error("Error saving image to cloudinary");
     }
-
+    let saveToDatabase;
     try {
-      const saveToDatabase = await saveImageToDB(
-        "1",
+      saveToDatabase = await saveImageToDB(
+        "cm432awrc0000gjrbs9h18e8q",
         prompt,
         cloudinaryResponse.url,
         imageKey
@@ -62,16 +63,22 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       console.error("ERROR IN SAVING TO DB:", error);
     }
-
-    return NextResponse.json({
-      imageUrl: cloudinaryResponse.url,
-      succeeded: true,
-    });
+    if (saveToDatabase?.url) {
+      return NextResponse.json({
+        imageUrl: saveToDatabase?.url,
+        status: true,
+      });
+    } else if (cloudinaryResponse?.url) {
+      return NextResponse.json({
+        imageUrl: cloudinaryResponse.url,
+        status: false,
+      });
+    }
   } catch (error) {
     console.error(`Error in /api/image/save:`, error);
     return NextResponse.json({
       imageUrl: "",
-      succeeded: false,
+      status: false,
     });
   }
 }

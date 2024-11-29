@@ -4,7 +4,7 @@ export async function saveImage(
   userId: string,
   prompt: string,
   imageUrl: string,
-  cloudinaryId?: string // Optional, since it's nullable in your schema
+  cloudinaryId = "" // Optional, since it's nullable in your schema
 ) {
   // Validate required inputs
   if (!userId || !prompt || !imageUrl) {
@@ -26,7 +26,7 @@ export async function saveImage(
   try {
     return prisma.image.create({
       data: {
-        cloudinaryId: cloudinaryId || null, // Explicitly set null if not provided
+        cloudinaryId, // Explicitly set null if not provided
         prompt,
         userId,
         url: imageUrl,
@@ -46,10 +46,16 @@ export async function getUserImages(userId: string) {
   });
 }
 
-export async function deleteImage(imageId: string) {
-  return prisma.image.delete({
-    where: { id: imageId },
+export async function deleteImage(imageId: string, imageUrl: string) {
+  const deletedImages = await prisma.image.deleteMany({
+    where: {
+      OR: [{ id: imageId }, { url: imageUrl }],
+    },
   });
+  return deletedImages;
+  // return prisma.image.delete({
+  //   where: { id: imageId },
+  // });
 }
 
 export async function createAlbum(userId: string, name: string) {

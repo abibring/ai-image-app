@@ -2,9 +2,9 @@
 
 import { Header } from "@/components/Header";
 import Link from "next/link";
-// import { useSession } from "next-auth/react";
-// import { useRouter } from "next/navigation";
-// import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function DashboardLayout({
@@ -12,23 +12,23 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const { data: session, status } = useSession();
-  // const [value, setValue] = useState("");
-  // const router = useRouter();
+  const { data: session, status } = useSession();
+  const [value, setValue] = useState("");
+  const router = useRouter();
 
-  // useEffect(() => {
-  //   if (status === "unauthenticated") {
-  //     router.push("/auth/signin");
-  //   }
-  // }, [status, router]);
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth/signin");
+    }
+  }, [status, router]);
 
-  // if (status === "loading") {
-  //   return <div>Loading...</div>;
-  // }
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
-  // if (!session) {
-  //   return null;
-  // }
+  if (!session) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col min-h-screen">

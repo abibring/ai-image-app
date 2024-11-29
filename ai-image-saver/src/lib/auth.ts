@@ -13,16 +13,38 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async session({ session, user }) {
       try {
         if (session.user) {
-          session.user.id = user.id;
+          console.log("user:", user, "\nsession:", session);
+          session.user.id = user?.id;
           // Fetch additional user data from the database
-          const dbUser = await prisma.user.findUnique({
-            where: { id: user.id },
+          const dbUser = await prisma.user.findFirst({
+            where: {
+              OR: [{ id: user?.id }, { email: session?.user?.email }],
+            },
           });
+
           console.log("dbUser:", dbUser);
-          //   if (dbUser) {
-          //     (session.user as any).isHandyman = dbUser.isHandyman;
-          //     (session.user as any).handyman = dbUser.handyman;
-          //   }
+          if (!dbUser) {
+            const dbUser = await prisma.user.create({
+              data: {
+                name: user.name,
+                image: user.image,
+                email: user.email,
+              },
+            });
+            if (dbUser) {
+              (session.user as any).databaseInfo = {
+                id: dbUser.id,
+              };
+            }
+
+            return session;
+          }
+
+          (session.user as any).databaseInfo = {
+            id: dbUser.id,
+          };
+
+          return session;
         }
         return session;
       } catch (error) {

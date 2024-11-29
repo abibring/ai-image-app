@@ -11,13 +11,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       imageUrl,
-      succeeded: true,
+      status: true,
     });
   } catch (error) {
     console.error(`Error in /api/image/generate:`, error);
     return NextResponse.json({
       imageUrl: "",
-      succeeded: false,
+      status: false,
     });
   }
 }

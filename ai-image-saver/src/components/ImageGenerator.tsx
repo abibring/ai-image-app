@@ -36,7 +36,7 @@ export function ImageGenerator() {
       if (!res.ok) throw new Error("Error with making message");
       const result = await res.json();
 
-      if (result.succeeded) {
+      if (result.status) {
         setGeneratedImage(result.imageUrl);
       }
     } catch (error) {
@@ -52,7 +52,7 @@ export function ImageGenerator() {
   };
   console.log("generatedImage:", generatedImage);
   const handleSave = async () => {
-    const userId = "1" || session?.user?.id;
+    const userId = session?.user?.id;
 
     if (!generatedImage || !userId) return;
 
@@ -70,8 +70,8 @@ export function ImageGenerator() {
       const results = await res.json();
       console.log("savedImage:", results);
       toast({
-        title: results.succeeded ? "Success" : "Failure",
-        description: results.succeeded
+        title: results.status ? "Success" : "Failure",
+        description: results.status
           ? "Image saved successfully!"
           : "Failed to save image. Please try again.",
       });

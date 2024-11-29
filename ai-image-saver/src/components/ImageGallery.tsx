@@ -1,34 +1,60 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { getUserImages } from "@/lib/db";
+
 import { useAppStore } from "@/lib/store";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { ImageCard } from "./ImageCard";
 
 const ImageGallery = () => {
-  const { images, setImages } = useAppStore();
-  console.log("images:", images);
-  // const { data: session } = useSession();
+  const { images, setImages, deleteImage } = useAppStore();
+
+  const { data: session } = useSession();
+
   const [mounted, setMounted] = useState<boolean>(false);
 
-  const fetchImages = async () => {
-    // if (!session?.user?.id) return;
-    const userImages = await getUserImages("1");
-    console.log("userImages:", userImages);
-    setImages(userImages as any);
+  const fetchUserImages = async () => {
+    try {
+      const userId = (session?.user as any)?.databaseInfo?.id;
+      if (!userId) return [];
+
+      const results = await fetch(`/api/image/getAll/${userId}`).then((r) =>
+        r.json()
+      );
+      return results;
+    } catch (error) {
+      return [];
+    }
   };
 
   useEffect(() => {
     if (!mounted) {
       setMounted(true);
+
       (async () => {
-        await fetchImages();
+        const userImages = await fetchUserImages();
+        setImages(userImages?.data);
       })();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log("images:", images);
-  return <div></div>;
+  return (
+    <div>
+      {images?.length > 0 &&
+        images.map((image) => (
+          <ImageCard
+            onDelete={() => deleteImage(image.id, image.url)}
+            key={image.id}
+            image={{
+              id: image.id,
+              url: image.url,
+              prompt: image.prompt,
+              createdAt: image.createdAt,
+            }}
+          />
+        ))}
+    </div>
+  );
 };
 
 export default ImageGallery;
