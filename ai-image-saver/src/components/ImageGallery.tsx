@@ -39,7 +39,7 @@ const ImageGallery = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div>
+    <div className="flex flex-col gap-2 pb-12">
       {images?.length > 0 &&
         images.map((image) => (
           <ImageCard

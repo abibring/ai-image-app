@@ -15,18 +15,18 @@ interface ImageCardProps {
 
 export function ImageCard({ image, onDelete }: ImageCardProps) {
   return (
-    <Card>
+    <Card className="flex flex-row">
       <CardContent className="p-2">
         <Image
           src={image.url}
           alt={image.prompt}
           width={300}
           height={300}
-          className="rounded-lg"
+          className="rounded-lg min-w-[300px] min-h-[300px]"
         />
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <p className="text-sm truncate">{image.prompt}</p>
+      <CardFooter className="flex justify-between w-full">
+        <p className="text-sm max-w-[40vw]">{image.prompt}</p>
         <Button variant="destructive" size="sm" onClick={onDelete}>
           Delete
         </Button>
