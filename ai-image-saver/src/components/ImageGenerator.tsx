@@ -2,7 +2,8 @@
 
 import { useSession } from "next-auth/react";
 
-import Image from "next/image";
+import { CldImage } from "next-cloudinary";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -112,7 +113,8 @@ export function ImageGenerator() {
 
         {generatedImage && (
           <div className="space-y-4">
-            <Image
+            <CldImage
+              deliveryType="fetch"
               src={generatedImage}
               alt="Generated image"
               width={512}

@@ -50,6 +50,7 @@ const ImageGallery = () => {
               url: image.url,
               prompt: image.prompt,
               createdAt: image.createdAt,
+              cloudinaryId: image.cloudinaryId,
             }}
           />
         ))}

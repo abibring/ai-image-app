@@ -1,9 +1,10 @@
 "use client";
-import Image from "next/image";
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "./ui/button";
 import { BaseSyntheticEvent } from "react";
+import { CldImage } from "next-cloudinary";
+import Image from "next/image";
 
 interface ImageCardProps {
   image: {
@@ -11,6 +12,7 @@ interface ImageCardProps {
     url: string;
     prompt: string;
     createdAt: string;
+    cloudinaryId: string;
   };
   onDelete: () => void;
 }
@@ -26,11 +28,12 @@ export function ImageCard({ image, onDelete }: ImageCardProps) {
   };
 
   const handleAddImageToAlbum = () => {};
-
+  console.log("iamges:", image);
   return (
     <Card className="flex flex-row">
       <CardContent className="p-2">
         <Image
+          // deliveryType="fetch"
           src={image.url}
           alt={image.prompt || "ai generated image"}
           width={300}

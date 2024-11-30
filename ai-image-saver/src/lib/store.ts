@@ -2,10 +2,14 @@ import { create } from "zustand";
 import { deleteImage } from "./db";
 
 interface Image {
-  id: string;
-  url: string;
-  prompt: string;
+  albumId: string;
+  cloudinaryId: string;
   createdAt: string;
+  id: string;
+  prompt: string;
+  updatedAt: string;
+  url: string;
+  userId: string;
 }
 
 interface Album {
@@ -15,16 +19,7 @@ interface Album {
   imageCount: number;
   createdAt?: string;
   userId?: string;
-  images?: {
-    albumId: string;
-    cloudinaryId: string;
-    createdAt: string;
-    id: string;
-    prompt: string;
-    updatedAt: string;
-    url: string;
-    userId: string;
-  }[];
+  images?: Image[];
 }
 
 interface AppState {

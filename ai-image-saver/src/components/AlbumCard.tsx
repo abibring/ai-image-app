@@ -1,4 +1,6 @@
-import Image from "next/image";
+"use client";
+import { CldImage } from "next-cloudinary";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
@@ -17,7 +19,8 @@ export function AlbumCard({ album, onDelete }: AlbumCardProps) {
     <Card>
       <CardContent className="p-2">
         {album.coverImage ? (
-          <Image
+          <CldImage
+            deliveryType="fetch"
             src={album.coverImage}
             alt={album.name}
             width={300}
