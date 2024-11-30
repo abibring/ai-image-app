@@ -74,6 +74,7 @@ export async function getUserAlbums(userId: string) {
       _count: {
         select: { images: true },
       },
+      images: true,
     },
     orderBy: { createdAt: "desc" },
   });

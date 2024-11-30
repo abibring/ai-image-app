@@ -13,6 +13,18 @@ interface Album {
   name: string;
   coverImage?: string;
   imageCount: number;
+  createdAt?: string;
+  userId?: string;
+  images?: {
+    albumId: string;
+    cloudinaryId: string;
+    createdAt: string;
+    id: string;
+    prompt: string;
+    updatedAt: string;
+    url: string;
+    userId: string;
+  }[];
 }
 
 interface AppState {

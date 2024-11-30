@@ -13,7 +13,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async session({ session, user }) {
       try {
         if (session.user) {
-          console.log("user:", user, "\nsession:", session);
+          // console.log("user:", user, "\nsession:", session);
           session.user.id = user?.id;
           // Fetch additional user data from the database
           const dbUser = await prisma.user.findFirst({
@@ -22,7 +22,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             },
           });
 
-          console.log("dbUser:", dbUser);
+          // console.log("dbUser:", dbUser);
           if (!dbUser) {
             const dbUser = await prisma.user.create({
               data: {

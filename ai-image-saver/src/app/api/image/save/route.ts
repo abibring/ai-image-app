@@ -26,25 +26,28 @@ export async function POST(request: NextRequest) {
       imageKey,
       "\n"
     );
+
     let cloudinaryResponse: any;
+    const tmpDir = path.resolve("./tmp");
+    const pathname = `${userId}_${imageName}_${Date.now()}.jpg`;
+    const tempPath = path.join(tmpDir, pathname);
+
     try {
       cloudinaryResponse = await saveImageToCloudinary(
         imageUrl,
-        imageName,
+        tempPath,
         prompt,
-        "cm432awrc0000gjrbs9h18e8q",
+        userId,
         imageKey
       );
-      const tmpDir = path.resolve("./tmp");
-      const pathname = `${userId}_${imageName}_${Date.now()}.jpg`;
 
-      // Generate a unique temporary file path
-      const tempPath = path.join(tmpDir, pathname);
-      // Delete the temporary file
-      fs.unlinkSync(tempPath);
       console.log("cloudinaryResponse:", cloudinaryResponse);
     } catch (error) {
       console.error("ERROR IN CLOUDINARY:", error);
+    } finally {
+      if (fs.existsSync(tmpDir)) {
+        fs.unlinkSync(tempPath); // Remove tmp file
+      }
     }
 
     if (!cloudinaryResponse?.url) {
@@ -53,13 +56,13 @@ export async function POST(request: NextRequest) {
     let saveToDatabase;
     try {
       saveToDatabase = await saveImageToDB(
-        "cm432awrc0000gjrbs9h18e8q",
+        userId,
         prompt,
         cloudinaryResponse.url,
         imageKey
       );
 
-      console.log("saveToDB:", saveToDatabase);
+      // console.log("saveToDB:", saveToDatabase);
     } catch (error) {
       console.error("ERROR IN SAVING TO DB:", error);
     }
@@ -85,7 +88,7 @@ export async function POST(request: NextRequest) {
 
 const saveImageToCloudinary = async (
   imageUrl: string,
-  imageName: string,
+  tempPath: string,
   prompt: string,
   userId: string,
   publicId: string
@@ -97,10 +100,6 @@ const saveImageToCloudinary = async (
   }
 
   const protocol = imageUrl.startsWith("https") ? https : http;
-  const pathname = `${userId}_${imageName}_${Date.now()}.jpg`;
-
-  // Generate a unique temporary file path
-  const tempPath = path.join(tmpDir, pathname);
 
   // Download and save the image to a temporary file
   return await new Promise<any>((resolve, reject) => {
@@ -115,7 +114,9 @@ const saveImageToCloudinary = async (
           );
           return;
         }
+
         response.pipe(file);
+
         file.on("finish", async () => {
           file.close();
           // Upload the saved image to Cloudinary
