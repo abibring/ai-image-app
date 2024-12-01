@@ -1,25 +1,24 @@
 import { openai } from "@/ai/ai";
 
-export async function generateImage(prompt: string): Promise<string> {
+type IResponseFormat = "url" | "b64_json" | null | undefined;
+
+// if using buffer, need to do Buffer.from(generateImage('prompt', 'b64_json'), 'base64');
+export async function generateImage(
+  prompt: string,
+  response_format: IResponseFormat = "url"
+): Promise<string | Buffer | undefined> {
   const response = await openai.images.generate({
     model: "dall-e-3",
     prompt: prompt,
     n: 1,
     size: "1024x1024",
+    response_format,
   });
   console.log("response:", response);
-  return response.data[0].url || "";
-}
+  const isUrl = response_format === "url";
+  const result = isUrl
+    ? response.data[0].url || ""
+    : response.data[0]?.b64_json;
 
-// export async function generateImage(prompt: string): Promise<Buffer> {
-//   const response = await openai.images.generate({
-//     model: "dall-e-3",
-//     prompt: prompt,
-//     n: 1,
-//     size: "1024x1024",
-//     response_format: "b64_json",
-//   });
-//   console.log("DAL-E response:", response.data);
-//   const imageData = response.data[0].b64_json;
-//   return imageData ? Buffer.from(imageData, "base64") : Buffer.from([]);
-// }
+  return result;
+}
