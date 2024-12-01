@@ -1,26 +1,27 @@
 import { create } from "zustand";
 import { deleteImage } from "./db";
+import { Album, Image } from "@prisma/client";
 
-interface Image {
-  albumId: string;
-  cloudinaryId: string;
-  createdAt: string;
-  id: string;
-  prompt: string;
-  updatedAt: string;
-  url: string;
-  userId: string;
-}
+// interface Image {
+//   albumId: string;
+//   cloudinaryId: string;
+//   createdAt: string;
+//   id: string;
+//   prompt: string;
+//   updatedAt: string;
+//   url: string;
+//   userId: string;
+// }
 
-interface Album {
-  id: string;
-  name: string;
-  coverImage?: string;
-  imageCount: number;
-  createdAt?: string;
-  userId?: string;
-  images?: Image[];
-}
+// interface Album {
+//   id: string;
+//   name: string;
+//   coverImage?: string;
+//   imageCount: number;
+//   createdAt?: string;
+//   userId?: string;
+//   images?: Image[];
+// }
 
 interface AppState {
   prompt: string;

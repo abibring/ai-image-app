@@ -5,15 +5,10 @@ import { Button } from "./ui/button";
 import { BaseSyntheticEvent } from "react";
 import { CldImage } from "next-cloudinary";
 import Image from "next/image";
+import { Image as PrismaImage } from "@prisma/client";
 
 interface ImageCardProps {
-  image: {
-    id: string;
-    url: string;
-    prompt: string;
-    createdAt: string;
-    cloudinaryId: string;
-  };
+  image: PrismaImage;
   onDelete: () => void;
 }
 

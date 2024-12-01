@@ -47,13 +47,7 @@ const AlbumImageGallery = ({ albumName }: { albumName: string }) => {
           <ImageCard
             onDelete={() => deleteImage(image.id, image.url)}
             key={image.id}
-            image={{
-              id: image.id,
-              url: image.url,
-              prompt: image.prompt,
-              createdAt: image.createdAt,
-              cloudinaryId: image.cloudinaryId,
-            }}
+            image={image}
           />
         ))}
     </div>

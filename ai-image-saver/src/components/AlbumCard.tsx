@@ -1,18 +1,21 @@
 "use client";
-import { CldImage } from "next-cloudinary";
+
+import Link from "next/link";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import Image from "next/image";
-import Link from "next/link";
+
+import { Album, Image as PrismaImage } from "@prisma/client";
+
+import { CldImage } from "next-cloudinary";
+
+interface IPrismaImage {
+  images: PrismaImage[];
+}
 
 interface AlbumCardProps {
-  album: {
-    id: string;
-    name: string;
-    coverImage?: string;
-    imageCount: number;
-  };
+  album: Album & Partial<IPrismaImage>;
   onDelete: () => void;
 }
 
@@ -21,10 +24,10 @@ export function AlbumCard({ album, onDelete }: AlbumCardProps) {
     <Link href={`/dashboard/albums/${album.name}`}>
       <Card>
         <CardContent className="p-2">
-          {album.coverImage ? (
+          {album?.images?.[0]?.url ? (
             <Image
               // deliveryType="fetch"
-              src={album.coverImage}
+              src={album.images[0].url}
               alt={album.name}
               width={300}
               height={200}
@@ -39,7 +42,9 @@ export function AlbumCard({ album, onDelete }: AlbumCardProps) {
         <CardFooter className="flex justify-between">
           <div>
             <h3 className="font-semibold">{album.name}</h3>
-            <p className="text-sm text-gray-500">{album.imageCount} images</p>
+            <p className="text-sm text-gray-500">
+              {album?.images?.length} images
+            </p>
           </div>
           <Button variant="destructive" size="sm" onClick={onDelete}>
             Delete

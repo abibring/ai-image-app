@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { ImageCard } from "./ImageCard";
 
-const ImageGallery = ({ album }: { album?: string | undefined }) => {
+const ImageGallery = () => {
   const { images, setImages, deleteImage } = useAppStore();
 
   const { data: session } = useSession();
@@ -45,13 +45,7 @@ const ImageGallery = ({ album }: { album?: string | undefined }) => {
           <ImageCard
             onDelete={() => deleteImage(image.id, image.url)}
             key={image.id}
-            image={{
-              id: image.id,
-              url: image.url,
-              prompt: image.prompt,
-              createdAt: image.createdAt,
-              cloudinaryId: image.cloudinaryId,
-            }}
+            image={image}
           />
         ))}
     </div>

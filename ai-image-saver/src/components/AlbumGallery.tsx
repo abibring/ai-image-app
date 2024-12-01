@@ -1,14 +1,17 @@
 "use client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { toast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
-import { useAppStore } from "@/lib/store";
 import { useSession } from "next-auth/react";
+
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useEffect } from "react";
+
 import { AlbumCard } from "./AlbumCard";
+
+import { toast } from "@/hooks/use-toast";
+import { useAppStore } from "@/lib/store";
 
 const AlbumGallery = () => {
   const { data: session } = useSession();
@@ -84,14 +87,7 @@ const AlbumGallery = () => {
           <AlbumCard
             key={album.id}
             onDelete={() => console.log("DELETE ME ", album)}
-            album={{
-              id: album.id,
-              name: album.name,
-              coverImage: !!album?.images?.[0]?.url
-                ? album?.images?.[0].url
-                : "",
-              imageCount: album?.images?.length || 0,
-            }}
+            album={album}
           />
         ))}
       </ul>
