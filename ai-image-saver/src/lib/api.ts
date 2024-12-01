@@ -14,11 +14,8 @@ export async function generateImage(
     size: "1024x1024",
     response_format,
   });
-  console.log("response:", response);
-  const isUrl = response_format === "url";
-  const result = isUrl
-    ? response.data[0].url || ""
-    : response.data[0]?.b64_json;
 
-  return result;
+  const isUrl = response_format === "url";
+
+  return isUrl ? response.data[0].url || "" : response.data[0]?.b64_json;
 }

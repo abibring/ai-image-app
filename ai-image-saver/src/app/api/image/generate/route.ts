@@ -5,6 +5,8 @@ export async function POST(request: NextRequest) {
   try {
     const prompt = (await request.json())?.prompt;
 
+    if (!prompt) throw new Error("No prompt provided!");
+
     const imageUrl = await generateImage(prompt);
 
     return NextResponse.json({
