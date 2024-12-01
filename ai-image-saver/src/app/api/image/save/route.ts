@@ -12,20 +12,9 @@ export async function POST(request: NextRequest) {
     const imageUrl = req?.imageUrl;
     const imageName = req?.imageName;
     const prompt = req?.prompt;
+    const albumId = req?.albumId;
     const userId = req?.userId || "cm432awrc0000gjrbs9h18e8q";
     const imageKey = `${userId}_${imageName}_${Date.now()}`;
-
-    console.log(
-      "\nimageUrl:",
-      imageUrl,
-      "\nimageName:",
-      imageName,
-      "\nprompt:",
-      prompt,
-      "\nimageKey:",
-      imageKey,
-      "\n"
-    );
 
     let cloudinaryResponse: any;
     const tmpDir = path.resolve("./tmp");
@@ -41,7 +30,7 @@ export async function POST(request: NextRequest) {
         imageKey
       );
 
-      console.log("cloudinaryResponse:", cloudinaryResponse);
+      // console.log("cloudinaryResponse:", cloudinaryResponse);
     } catch (error) {
       console.error("ERROR IN CLOUDINARY:", error);
     } finally {
@@ -53,13 +42,15 @@ export async function POST(request: NextRequest) {
     if (!cloudinaryResponse?.url) {
       throw new Error("Error saving image to cloudinary");
     }
+
     let saveToDatabase;
     try {
       saveToDatabase = await saveImageToDB(
         userId,
         prompt,
         cloudinaryResponse.url,
-        imageKey
+        imageKey,
+        albumId
       );
 
       // console.log("saveToDB:", saveToDatabase);

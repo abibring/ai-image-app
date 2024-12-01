@@ -4,39 +4,29 @@ export async function saveImage(
   userId: string,
   prompt: string,
   imageUrl: string,
-  cloudinaryId = "" // Optional, since it's nullable in your schema
+  cloudinaryId = "",
+  albumId = null
 ) {
-  // Validate required inputs
   if (!userId || !prompt || !imageUrl) {
     throw new Error(
       "Invalid input: userId, prompt, and imageUrl are required."
     );
   }
 
-  console.log(
-    "userId:",
-    userId,
-    "\nprompt:",
-    prompt,
-    "\nimageUrl:",
-    imageUrl,
-    "\ncloudinaryId:",
-    cloudinaryId
-  );
   try {
     return prisma.image.create({
       data: {
-        cloudinaryId, // Explicitly set null if not provided
+        cloudinaryId: cloudinaryId || null,
         prompt,
         userId,
         url: imageUrl,
+        albumId,
       },
     });
   } catch (error) {
     console.error("error in saving image to prisma:", error);
     return null;
   }
-  // Create the image record in the database
 }
 
 export async function getUserImages(userId: string) {
@@ -47,15 +37,11 @@ export async function getUserImages(userId: string) {
 }
 
 export async function deleteImage(imageId: string, imageUrl: string) {
-  const deletedImages = await prisma.image.deleteMany({
+  return prisma.image.deleteMany({
     where: {
       OR: [{ id: imageId }, { url: imageUrl }],
     },
   });
-  return deletedImages;
-  // return prisma.image.delete({
-  //   where: { id: imageId },
-  // });
 }
 
 export async function createAlbum(userId: string, name: string) {
@@ -77,6 +63,34 @@ export async function getUserAlbums(userId: string) {
       images: true,
     },
     orderBy: { createdAt: "desc" },
+  });
+}
+
+export async function getImagesByAlbum(albumName: string) {
+  return prisma.image.findMany({
+    where: {
+      album: {
+        name: albumName,
+      },
+    },
+  });
+}
+
+export async function saveImageAndConnectToAlbum(
+  userId: string,
+  prompt: string,
+  imageUrl: string,
+  albumId: string,
+  cloudinaryId = ""
+) {
+  return prisma.image.create({
+    data: {
+      cloudinaryId,
+      prompt,
+      userId,
+      url: imageUrl,
+      albumId,
+    },
   });
 }
 

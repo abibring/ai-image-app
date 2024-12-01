@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useAppStore } from "@/lib/store";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useAppStore } from "@/lib/store";
 import { ImageCard } from "./ImageCard";
 
-const ImageGallery = ({ album }: { album?: string | undefined }) => {
+const AlbumImageGallery = ({ albumName }: { albumName: string }) => {
   const { images, setImages, deleteImage } = useAppStore();
 
   const { data: session } = useSession();
@@ -16,11 +16,13 @@ const ImageGallery = ({ album }: { album?: string | undefined }) => {
   const fetchUserImages = async () => {
     try {
       const userId = (session?.user as any)?.dbInfo?.id;
-      if (!userId) return [];
 
-      const { data } = await fetch(`/api/image/get/by-user/${userId}`).then(
+      if (!userId || !albumName) return [];
+
+      const { data } = await fetch(`/api/image/get/by-album/${albumName}`).then(
         (r) => r.json()
       );
+
       return data;
     } catch (error) {
       return [];
@@ -58,6 +60,6 @@ const ImageGallery = ({ album }: { album?: string | undefined }) => {
   );
 };
 
-export default ImageGallery;
+export default AlbumImageGallery;
 
 // https://res.cloudinary.com/dif7gcoer/image/upload/v1732890950/ai-generated-images/1_2024-11-29T14:35:48.460Z-ai-generated-image_1732890949347.png

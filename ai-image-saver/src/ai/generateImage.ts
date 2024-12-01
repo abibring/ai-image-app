@@ -20,7 +20,6 @@ type Args = z.infer<typeof generateImageToolDefinition.parameters>;
 
 export const generateImage: ToolFn<Args, Buffer> = async ({
   toolArgs: { prompt },
-  userMessage,
 }) => {
   const response = await openai.images.generate({
     model: "dall-e-3",
@@ -29,12 +28,13 @@ export const generateImage: ToolFn<Args, Buffer> = async ({
     size: "1024x1024",
     response_format: "b64_json",
   });
-  console.log("\n\n DALE DATA:", response.data, "\n\n");
+
   const imageData = response.data[0].b64_json;
+
   if (imageData) {
     const buffer = Buffer.from(imageData, "base64");
     return buffer;
-    // return imageUrl;
   }
+
   return Buffer.from([]);
 };

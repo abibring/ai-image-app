@@ -28,7 +28,7 @@ export function ImageCard({ image, onDelete }: ImageCardProps) {
   };
 
   const handleAddImageToAlbum = () => {};
-  console.log("iamges:", image);
+
   return (
     <Card className="flex flex-row">
       <CardContent className="p-2">

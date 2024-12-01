@@ -13,16 +13,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async session({ session, user }) {
       try {
         if (session.user) {
-          // console.log("user:", user, "\nsession:", session);
           session.user.id = user?.id;
-          // Fetch additional user data from the database
+
           const dbUser = await prisma.user.findFirst({
             where: {
               OR: [{ id: user?.id }, { email: session?.user?.email }],
             },
           });
 
-          // console.log("dbUser:", dbUser);
           if (!dbUser) {
             const dbUser = await prisma.user.create({
               data: {
@@ -31,8 +29,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                 email: user.email,
               },
             });
+
             if (dbUser) {
-              (session.user as any).databaseInfo = {
+              (session.user as any).dbInfo = {
                 id: dbUser.id,
               };
             }
@@ -40,7 +39,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             return session;
           }
 
-          (session.user as any).databaseInfo = {
+          (session.user as any).dbInfo = {
             id: dbUser.id,
           };
 

@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 
     try {
       const response = await createAlbum(userId, albumName);
-      console.log("createAlbum:", response);
+
       return NextResponse.json({
         data: response,
         status: true,
