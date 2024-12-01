@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { saveImage as saveImageToDB } from "@/lib/db";
 import fs from "fs";

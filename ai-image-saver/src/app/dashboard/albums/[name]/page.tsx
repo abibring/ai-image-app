@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import AlbumImageGallery from "@/components/AlbumImageGallery";
 
 export default async function AlbumsPage({ params }: any) {
@@ -5,8 +7,8 @@ export default async function AlbumsPage({ params }: any) {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">
-        {albumName.replaceAll("_", " ").replaceAll("-", " ")}
+      <h1 className="text-2xl font-bold mb-4 capitalize">
+        {albumName.replaceAll("_", " ")}
       </h1>
       <AlbumImageGallery albumName={albumName} />
     </div>

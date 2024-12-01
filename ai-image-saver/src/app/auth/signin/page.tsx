@@ -19,6 +19,7 @@ export default function SignIn() {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="p-8 bg-white rounded-lg shadow-md w-96">
         <h1 className="text-2xl font-bold mb-6 text-center">Sign In</h1>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             type="email"
@@ -31,6 +32,7 @@ export default function SignIn() {
             Sign in with Email
           </Button>
         </form>
+
         <div className="mt-4">
           <Button
             onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
@@ -38,6 +40,7 @@ export default function SignIn() {
           >
             Sign in with Google
           </Button>
+
           <Button
             onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
             className="w-full"

@@ -23,6 +23,11 @@ const ImageGallery = () => {
       );
       return data;
     } catch (error) {
+      console.error(
+        "\n\nImageGallery => fetchUserImages => error:",
+        error,
+        "\n\n"
+      );
       return [];
     }
   };

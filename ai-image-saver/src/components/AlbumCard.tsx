@@ -6,13 +6,14 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
-import { Album, Image as PrismaImage } from "@prisma/client";
+import { Album, Image as ImagePrisma } from "@prisma/client";
 
-import { CldImage } from "next-cloudinary";
+// import { CldImage } from "next-cloudinary";
+
 import clsx from "clsx";
 
 interface IPrismaImage {
-  images: PrismaImage[];
+  images: ImagePrisma[];
 }
 
 interface AlbumCardProps {
@@ -21,14 +22,16 @@ interface AlbumCardProps {
 }
 
 export function AlbumCard({ album, onDelete }: AlbumCardProps) {
+  const firstImageInAlbum = album?.images?.[0]?.url;
+
   return (
     <Link href={`/dashboard/albums/${album.name}`}>
       <Card>
         <CardContent className="p-2">
-          {album?.images?.[0]?.url ? (
+          {firstImageInAlbum ? (
             <Image
               // deliveryType="fetch"
-              src={album.images[0].url}
+              src={firstImageInAlbum}
               alt={album.name}
               width={300}
               height={200}
@@ -42,17 +45,21 @@ export function AlbumCard({ album, onDelete }: AlbumCardProps) {
                 "bg-gray-200 rounded-lg"
               )}
             >
-              No images
+              <p className="text-2xl">No Images</p>
             </div>
           )}
         </CardContent>
+
         <CardFooter className="flex justify-between">
           <div>
-            <h3 className="font-semibold">{album.name}</h3>
+            <h3 className="font-semibold capitalize">
+              {album.name.replaceAll("_", " ")}
+            </h3>
             <p className="text-sm text-gray-500">
               {album?.images?.length} images
             </p>
           </div>
+
           <Button variant="destructive" size="sm" onClick={onDelete}>
             Delete
           </Button>

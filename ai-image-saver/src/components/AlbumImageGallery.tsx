@@ -25,6 +25,11 @@ const AlbumImageGallery = ({ albumName }: { albumName: string }) => {
 
       return data;
     } catch (error) {
+      console.error(
+        "\n\nAlbumImageGallery => fetchUserImages => error:",
+        error,
+        "\n\n"
+      );
       return [];
     }
   };

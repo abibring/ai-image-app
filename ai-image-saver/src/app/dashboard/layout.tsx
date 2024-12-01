@@ -25,7 +25,7 @@ export default function DashboardLayout({
 
   if (status === "loading") return <div>Loading...</div>;
 
-  if (!session) return null;
+  if (!session) return <></>;
 
   return (
     <div className="flex flex-col min-h-screen">

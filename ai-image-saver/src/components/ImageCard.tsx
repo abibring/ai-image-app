@@ -1,14 +1,18 @@
 "use client";
 
+import { BaseSyntheticEvent } from "react";
+
+import Image from "next/image";
+
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "./ui/button";
-import { BaseSyntheticEvent } from "react";
-import { CldImage } from "next-cloudinary";
-import Image from "next/image";
-import { Image as PrismaImage } from "@prisma/client";
+
+import { Image as ImagePrisma } from "@prisma/client";
+
+// import { CldImage } from "next-cloudinary";
 
 interface ImageCardProps {
-  image: PrismaImage;
+  image: ImagePrisma;
   onDelete: () => void;
 }
 
@@ -30,13 +34,14 @@ export function ImageCard({ image, onDelete }: ImageCardProps) {
         <Image
           // deliveryType="fetch"
           src={image.url}
-          alt={image.prompt || "ai generated image"}
+          alt={image.prompt.slice(0, 50) || "ai generated image"}
           width={300}
           height={300}
           className="rounded-lg min-w-[300px] min-h-[300px]"
           onClick={handleImageFullScreen}
         />
       </CardContent>
+
       <CardFooter className="flex justify-between w-full">
         <p className="text-sm max-w-[40vw]">{image.prompt}</p>
         <div className="flex flex-col gap-2 ">
