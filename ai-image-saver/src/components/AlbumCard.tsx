@@ -9,6 +9,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Album, Image as PrismaImage } from "@prisma/client";
 
 import { CldImage } from "next-cloudinary";
+import clsx from "clsx";
 
 interface IPrismaImage {
   images: PrismaImage[];
@@ -34,7 +35,13 @@ export function AlbumCard({ album, onDelete }: AlbumCardProps) {
               className="rounded-lg object-cover"
             />
           ) : (
-            <div className="w-full h-[200px] bg-gray-200 rounded-lg flex items-center justify-center">
+            <div
+              className={clsx(
+                "flex items-center justify-center",
+                "w-full h-[200px]",
+                "bg-gray-200 rounded-lg"
+              )}
+            >
               No images
             </div>
           )}
