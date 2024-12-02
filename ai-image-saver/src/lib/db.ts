@@ -1,5 +1,17 @@
 import { prisma } from "@/../prisma/prisma";
 
+export async function findImageByPrompt(prompt: string) {
+  if (!prompt) {
+    throw new Error("Missing cloudinary id!");
+  }
+  console.log("prompt:", prompt);
+  return prisma.image.findFirst({
+    where: {
+      prompt,
+    },
+  });
+}
+
 export async function saveImage(
   userId: string,
   prompt: string,

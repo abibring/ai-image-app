@@ -82,7 +82,7 @@ const AlbumGallery = () => {
         onChange={(e) => setNewAlbumName(e.target.value)}
       />
       <Button onClick={handleCreateAlbum}>Create Album</Button>
-      <ul>
+      <ul className="flex flex-row flex-wrap gap-4">
         {albums?.map((album) => (
           <AlbumCard
             key={album.id}

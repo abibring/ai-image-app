@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
-import { saveImage as saveImageToDB } from "@/lib/db";
+import { findImageByPrompt, saveImage as saveImageToDB } from "@/lib/db";
 import fs from "fs";
 import path from "path";
 import cloudinary from "@/lib/cloudinary";
@@ -14,13 +14,18 @@ export async function POST(request: NextRequest) {
     const imageName = req?.imageName;
     const prompt = req?.prompt;
     const albumId = req?.albumId;
-    const userId = req?.userId || "cm432awrc0000gjrbs9h18e8q";
-    const imageKey = `${userId}_${imageName}_${Date.now()}`;
+    const userId = req?.userId;
+    const imageKey = !!userId && !!imageName ? `${userId}_${imageName}` : "";
 
     let cloudinaryResponse: any;
     const tmpDir = path.resolve("./tmp");
-    const pathname = `${userId}_${imageName}_${Date.now()}.jpg`;
+    const pathname = `${userId}_${imageName}.jpg`;
     const tempPath = path.join(tmpDir, pathname);
+
+    const isImageAlreadyInDb = await findImageByPrompt(prompt);
+    console.log("isImageAlreadyInDb:", isImageAlreadyInDb);
+    if (isImageAlreadyInDb) {
+    }
 
     try {
       cloudinaryResponse = await saveImageToCloudinary(

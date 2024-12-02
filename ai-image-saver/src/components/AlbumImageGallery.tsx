@@ -45,14 +45,20 @@ const AlbumImageGallery = ({ albumName }: { albumName: string }) => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const sortedImages = images.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
   return (
-    <div className="flex flex-col gap-2 pb-12">
-      {images?.length > 0 &&
-        images.map((image) => (
+    <div className="flex flex-row gap-x-2 gap-y-3 pb-12 px-2 flex-wrap">
+      {sortedImages?.length > 0 &&
+        sortedImages.map((image) => (
           <ImageCard
+            userId={(session?.user as any)?.dbInfo?.id}
             onDelete={() => deleteImage(image.id, image.url)}
             key={image.id}
             image={image}
+            isAlbumView={true}
           />
         ))}
     </div>

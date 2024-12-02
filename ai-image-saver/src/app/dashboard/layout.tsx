@@ -30,7 +30,7 @@ export default function DashboardLayout({
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
+      <main className="flex-grow container mx-auto px-8 py-8">
         <Tabs>
           <TabsList className="mb-8">
             <Link href="/dashboard">

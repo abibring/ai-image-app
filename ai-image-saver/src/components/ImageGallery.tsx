@@ -43,11 +43,16 @@ const ImageGallery = () => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const sortedImages = images.sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
+  console.log("images:", images, "\nsortedImages:", sortedImages);
   return (
-    <div className="flex flex-col gap-2 pb-12">
-      {images?.length > 0 &&
-        images.map((image) => (
+    <div className="flex flex-row flex-wrap gap-4 pb-12 w-full">
+      {sortedImages?.length > 0 &&
+        sortedImages.map((image) => (
           <ImageCard
+            userId={(session?.user as any)?.dbInfo?.id}
             onDelete={() => deleteImage(image.id, image.url)}
             key={image.id}
             image={image}

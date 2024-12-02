@@ -16,6 +16,6 @@ export async function generateImage(
   });
 
   const isUrl = response_format === "url";
-
+  console.log("response.data:", response.data);
   return isUrl ? response.data[0].url || "" : response.data[0]?.b64_json;
 }

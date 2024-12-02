@@ -18,7 +18,7 @@ export default function Home() {
         Create, save, and organize AI-generated images
       </p>
       <Link href="/dashboard">
-        <Button size="lg">Generate Your First Image</Button>
+        <Button size="lg">Generate an Image</Button>
       </Link>
     </div>
   );

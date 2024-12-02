@@ -45,6 +45,7 @@ export function ImageGenerator() {
   const { data: session } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isConnectedToAlbum, setIsConnectedToAlbum] = useState<boolean>(false);
+  const [isSavingImage, setIsSavingImage] = useState<boolean>(false);
   const [connectedAlbumInfo, setConnectedAlbumInfo] = useState<{
     name: string;
     id: string;
@@ -101,11 +102,14 @@ export function ImageGenerator() {
 
     if (!generatedImage || !user) return;
 
+    setIsSavingImage(true);
+
     try {
       const payload = {
         imageUrl: generatedImage,
         imageName: (imageName || "").trim().toLowerCase().replaceAll(" ", "_"),
         prompt,
+        userId: (user as any)?.dbInfo?.id,
       };
       const body =
         isConnectedToAlbum && connectedAlbumInfo.id
@@ -134,6 +138,7 @@ export function ImageGenerator() {
       });
     } finally {
       setIsDialogOpen(false);
+      setIsSavingImage(false);
     }
   };
 
@@ -159,6 +164,7 @@ export function ImageGenerator() {
       <div className="space-y-4">
         <div className="flex space-x-2">
           <Input
+            min={5}
             type="text"
             placeholder="Enter your prompt"
             value={prompt}
@@ -184,7 +190,7 @@ export function ImageGenerator() {
       </div>
       <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
         <DialogTrigger asChild>
-          <Button variant="outline" className="mt-4">
+          <Button variant="outline" className="mt-4" disabled={isSavingImage}>
             Save Image
           </Button>
         </DialogTrigger>
