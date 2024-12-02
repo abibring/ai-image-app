@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 
 import { Header } from "@/components/Header";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardLayout({
   children,
@@ -30,19 +31,21 @@ export default function DashboardLayout({
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow container mx-auto px-8 py-8">
+      <main className="flex-grow container mx-auto py-8">
         <Tabs>
-          <TabsList className="mb-8">
+          <div className="flex flex-row gap-4">
             <Link href="/dashboard">
-              <TabsTrigger value="generate">Generate</TabsTrigger>
+              <Button variant="default">Generate</Button>
             </Link>
-            <Link href="/dashboard/images">
-              <TabsTrigger value="images">My Images</TabsTrigger>
-            </Link>
-            <Link href="/dashboard/albums">
-              <TabsTrigger value="albums">My Albums</TabsTrigger>
-            </Link>
-          </TabsList>
+            <TabsList className="mb-8">
+              <Link href="/dashboard/images">
+                <TabsTrigger value="images">My Images</TabsTrigger>
+              </Link>
+              <Link href="/dashboard/albums">
+                <TabsTrigger value="albums">My Albums</TabsTrigger>
+              </Link>
+            </TabsList>
+          </div>
           {children}
         </Tabs>
       </main>

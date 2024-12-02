@@ -190,7 +190,11 @@ export function ImageGenerator() {
       </div>
       <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
         <DialogTrigger asChild>
-          <Button variant="outline" className="mt-4" disabled={isSavingImage}>
+          <Button
+            className="bg-green-700 hover:bg-green-800 mt-4 text-white hover:text-white"
+            variant="outline"
+            disabled={isSavingImage}
+          >
             Save Image
           </Button>
         </DialogTrigger>
