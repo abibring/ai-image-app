@@ -37,7 +37,7 @@ export default function DashboardLayout({
             <Link href="/dashboard">
               <Button variant="default">Generate</Button>
             </Link>
-            <TabsList className="mb-8">
+            <TabsList className="mb-8 border border-grey-300">
               <Link href="/dashboard/images">
                 <TabsTrigger value="images">My Images</TabsTrigger>
               </Link>

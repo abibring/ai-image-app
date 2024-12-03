@@ -16,6 +16,7 @@ import { Label } from "./ui/label";
 import { useAppStore } from "@/lib/store";
 
 import { useToast } from "@/hooks/use-toast";
+import { TriangleAlert } from "lucide-react";
 // import { LoaderCircle } from "lucide-react";
 
 import {
@@ -27,6 +28,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { LoadingSpinner } from "./LoadingSpinner";
+
+interface IAlbumInfo {
+  name: string;
+  id: string;
+}
 
 export function ImageGenerator() {
   const {
@@ -44,12 +51,11 @@ export function ImageGenerator() {
   const { toast } = useToast();
   const { data: session } = useSession();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [imageIsGeneratedButNotSaved, setImageIsGeneratedButNotSaved] =
+    useState<boolean>(false);
   const [isConnectedToAlbum, setIsConnectedToAlbum] = useState<boolean>(false);
   const [isSavingImage, setIsSavingImage] = useState<boolean>(false);
-  const [connectedAlbumInfo, setConnectedAlbumInfo] = useState<{
-    name: string;
-    id: string;
-  }>({
+  const [connectedAlbumInfo, setConnectedAlbumInfo] = useState<IAlbumInfo>({
     name: "",
     id: "",
   });
@@ -84,6 +90,7 @@ export function ImageGenerator() {
 
       if (result.status) {
         setGeneratedImage(result.imageUrl);
+        setImageIsGeneratedButNotSaved(true);
       }
     } catch (error) {
       console.error("\n\nhandleGenerate => error:", error, "\n\n");
@@ -120,6 +127,8 @@ export function ImageGenerator() {
         method: "POST",
         body: JSON.stringify(body),
       }).then((r) => r.json());
+
+      setImageIsGeneratedButNotSaved(false);
 
       await getAlbums();
 
@@ -162,17 +171,28 @@ export function ImageGenerator() {
   return (
     <>
       <div className="space-y-4">
-        <div className="flex space-x-2">
-          <Input
-            min={5}
-            type="text"
-            placeholder="Enter your prompt"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-          />
-          <Button onClick={handleGenerate} disabled={isGenerating}>
-            {isGenerating ? "Generating..." : "Generate"}
-          </Button>
+        <div className="flex flex-col gap-4">
+          <div className="flex space-x-2">
+            <Input
+              min={5}
+              type="text"
+              placeholder="Enter your prompt"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+            />
+            <Button onClick={handleGenerate} disabled={isGenerating}>
+              {isGenerating ? <LoadingSpinner /> : "Generate"}
+            </Button>
+          </div>
+          {imageIsGeneratedButNotSaved && (
+            <div className="flex flex-row items-center gap-2">
+              <TriangleAlert className="text-red-600 w-8 h-8" />
+              <p className="text-red-600 text-xl font-bold max-w-[100%]">
+                Warning: You must click the 'Save Image' button to save this
+                image permanently.
+              </p>
+            </div>
+          )}
         </div>
 
         {generatedImage && (
@@ -220,7 +240,9 @@ export function ImageGenerator() {
                 albums={albums}
                 onChange={handleAlbumDropdownChange}
               />
-              <Button onClick={handleSave}>Save</Button>
+              <Button onClick={handleSave} disabled={isSavingImage}>
+                {!isSavingImage ? "Save" : <LoadingSpinner />}
+              </Button>
             </div>
           </div>
         </DialogContent>
